@@ -1,22 +1,22 @@
 #!/usr/bin/env ruby
 #^syntax detection
 
-mod 'puppetlabs-stdlib',
+mod 'stdlib',
   :git => 'https://github.com/puppetlabs/puppetlabs-stdlib',
   :tag => '4.13.1'
 
-mod 'puppetlabs-apt',
+mod 'apt',
   :git => 'https://github.com/puppetlabs/puppetlabs-apt.git',
   :tag => '2.1.0'
 
-mod 'puppetlabs-concat',
+mod 'concat',
   :git => 'https://github.com/puppetlabs/puppetlabs-concat.git',
   :tag => '3.0.0'
 
-mod 'puppet-archive',
+mod 'archive',
   :git => 'https://github.com/voxpupuli/puppet-archive.git',
   :tag => 'v1.1.2'
 
-mod 'obiautomata',
+mod 'obijiautomata',
   :git => 'https://github.com/onnorom/obi-obiautomata.git',
-  :tag => '0.1.0'
+  :tag => '0.1.1'
