@@ -1,0 +1,17 @@
+<%- |
+    String $startstr,
+    String $stopstr,
+    String $role = 'automata',
+    String $pidfile = '/var/automata/pid/automata.pid',
+| -%>
+[Unit]
+Description=The application service <%= $role %>.
+
+[Service]
+Type=forking
+PIDFile=<%=$pidfile%>
+ExecStart=<%=$startstr%>
+ExecStop=<%=$stopstr%>
+
+[Install]
+WantedBy=multi-user.target

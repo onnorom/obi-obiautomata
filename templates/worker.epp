@@ -1,0 +1,45 @@
+<%- |
+    String $update_script_path,
+    String $pidfile,
+    String $sleep_secs = '1800',
+| -%>
+#!/usr/bin/env bash
+
+trap process_USR1 SIGUSR1
+
+pidfile=<%=$pidfile%>
+process_USR1() {
+    echo 'Got signal USR1'
+    exit 0
+}
+
+WKDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PROGNAME=$(basename $0)
+cd /
+
+if [ "$1" = "child" ] ; then 
+    shift; tty="$1"; shift
+    umask 0
+    $WKDIR/$PROGNAME XXrefork_daemonXX "$@" </dev/null >/dev/null 2>/dev/null &
+    exit 0
+fi
+
+if [ "$1" != "XXrefork_daemonXX" ] ; then
+    tty=$(tty)
+    setsid $WKDIR/$PROGNAME child "$@" &
+    exit 0
+fi
+
+exec >/tmp/outfile
+exec 2>/tmp/errfile
+exec 0</dev/null
+
+shift; tty="$1"; shift
+
+while true; do
+    ( [[ ! -f $pidfile ]] || [[ -z $pidfile ]] ) && echo "$$" > $pidfile 
+    <%=$update_script_path%>
+    sleep <%=$sleep_secs%>
+done
+
+exit 
