@@ -1,6 +1,6 @@
-class obiautomata ( 
+class obijiautomata ( 
   String $ctrlscript,
-  String $servicetype = lookup('obiautomata::service::type', String, 'first', 'service'),
+  String $servicetype = lookup('obijiautomata::service::type', String, 'first', 'service'),
 ) {
 
   $updater = $facts['os']['family'] ? {
@@ -10,5 +10,5 @@ class obiautomata (
 
   notify {"Automating with $name":}
   
-  ensure_resource('class', "obiautomata::service::${updater['type']}", { 'script' => "${updater['script']}", 'type' => $servicetype })
+  ensure_resource('class', "obijiautomata::service::${updater['type']}", { 'script' => "${updater['script']}", 'type' => $servicetype })
 }

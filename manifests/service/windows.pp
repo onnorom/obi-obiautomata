@@ -1,4 +1,4 @@
-class obiautomata::service::windows (
+class obijiautomata::service::windows (
     String $script,
     String $type,
     String $sleep_interval = lookup('runinterval', String, 'first', '600'),

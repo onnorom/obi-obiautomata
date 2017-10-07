@@ -1,1 +1,1 @@
-# bnsautomata
+# obijiautomata

@@ -1,4 +1,4 @@
-class obiautomata::service::default (
+class obijiautomata::service::default (
     String $script,
     String $type,
     String $sleep_interval = lookup('runinterval', String, 'first', '600'),
@@ -27,7 +27,7 @@ class obiautomata::service::default (
       file { '/etc/automata/bin/worker.sh':
         ensure  => present,
         mode    => '0755',
-        content => epp('obiautomata/worker.epp', {
+        content => epp('obijiautomata/worker.epp', {
             update_script_path => $script,
             pidfile            => '/var/automata/pid/automata.pid',
             sleep_secs         => $sleep_interval,
@@ -35,9 +35,9 @@ class obiautomata::service::default (
       }
 
       # Manage the services
-      file { '/etc/systemd/system/obiautomata.service':
+      file { '/etc/systemd/system/obijiautomata.service':
         ensure  => present,
-        content => epp('obiautomata/service.epp', {
+        content => epp('obijiautomata/service.epp', {
             startstr => $service['start'],
             stopstr  => $service['stop'],
         })
@@ -46,16 +46,16 @@ class obiautomata::service::default (
       # Reload the changed file
       exec { '/bin/systemctl daemon-reload':
         refreshonly => true,
-        notify      => Service['obiautomata'],
-        require     => File['/etc/systemd/system/obiautomata.service'],
+        notify      => Service['obijiautomata'],
+        require     => File['/etc/systemd/system/obijiautomata.service'],
       }
 
       # Enable service in the node and startup if not explicitly turned off
-      service { 'obiautomata':
+      service { 'obijiautomata':
         ensure    => $ensure,
         enable    => true,
-        subscribe => File['/etc/systemd/system/obiautomata.service'],
-        require   => File['/etc/systemd/system/obiautomata.service'],
+        subscribe => File['/etc/systemd/system/obijiautomata.service'],
+        require   => File['/etc/systemd/system/obijiautomata.service'],
       }
    } else {
       fail("Unsupported service type ${type}...")
