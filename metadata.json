@@ -1,6 +1,6 @@
 {
   "name": "obijiautomata",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "author": "obiji.nnorom@gmail.com",
   "summary": "Installs software to ensure proper building of masterless projects.",
   "license": "Apache-2.0",
