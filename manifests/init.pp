@@ -1,14 +1,23 @@
 class obijiautomata ( 
-  String $ctrlscript,
   String $servicetype = lookup('obijiautomata::service::type', String, 'first', 'service'),
 ) {
 
+  if ($facts['automata_ctrldir'] != undef) {
+    $ctrldir = $facts['automata_ctrldir']
+  } else {
+    fail("Missing fact (automata_ctrldir) required to run ${name}")
+  }
+
   $updater = $facts['os']['family'] ? {
-    'windows' => { 'type' => 'windows', 'script' => "${ctrlscript}" },
-    default   => { 'type' => 'default', 'script' => "${ctrlscript}" }
+    'Windows' => { 'type' => 'windows', 'script' => "${ctrldir}\\update.bat" },
+    /(RedHat|Debian|CentOS)/ => { 'type' => 'linux', script=>"${ctrldir}/update.sh" },
+    default   => { 'script' => "${ctrldir}/update.sh", type=>$::osfamily }, 
   } 
 
-  notify {"Automating with $name":}
-  
-  ensure_resource('class', "obijiautomata::service::${updater['type']}", { 'script' => "${updater['script']}", 'type' => $servicetype })
+  if defined("obijiautomata::service::${updater['type']}") {
+    notify {"Automating with $name":}
+    ensure_resource('class', "obijiautomata::service::${updater['type']}", { 'script' => "${updater['script']}", 'type' => $servicetype })
+  } else {
+    fail("Unsupported operating system (${updater['type']})")
+  }
 }

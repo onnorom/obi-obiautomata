@@ -16,7 +16,3 @@ mod 'concat',
 mod 'archive',
   :git => 'https://github.com/voxpupuli/puppet-archive.git',
   :tag => 'v1.1.2'
-
-mod 'obijiautomata',
-  :git => 'https://github.com/onnorom/obi-obijiautomata.git',
-  :tag => '0.1.1'
