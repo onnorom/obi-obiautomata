@@ -1,8 +1,8 @@
-class obijiautomata::service::default (
-    String $script,
-    String $type,
-    String $sleep_interval = lookup('runinterval', String, 'first', '600'),
-    Boolean $ensure = true,
+class obijiautomata::service::linux (
+  String $script,
+  String $type,
+  String $sleep_interval = lookup('runinterval', String, 'first', '600'),
+  Boolean $ensure = true,
 ) {
 
     if ($type == 'cron') {
@@ -22,9 +22,10 @@ class obijiautomata::service::default (
       ensure_resource ('file', '/etc/automata', { ensure => 'directory', mode   => '0755' })
       ensure_resource ('file', '/etc/automata/bin', { ensure => 'directory', mode   => '0755' })
 
-      $service = { 'start' => '/etc/automata/bin/worker.sh', 'stop' => '/bin/kill -s SIGUSR1 $MAINPID' }
+      $worker_name="automata_worker_${facts['app_environment']}.sh"
+      $service = { 'start' => "/etc/automata/bin/${worker_name}", 'stop' => '/bin/kill -s SIGUSR1 $MAINPID' }
 
-      file { '/etc/automata/bin/worker.sh':
+      file { "/etc/automata/bin/${worker_name}":
         ensure  => present,
         mode    => '0755',
         content => epp('obijiautomata/worker.epp', {
