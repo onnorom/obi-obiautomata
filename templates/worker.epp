@@ -20,11 +20,11 @@ cd /
 if [ "$1" = "child" ] ; then 
     shift; tty="$1"; shift
     umask 0
-    $WKDIR/$PROGNAME XXrefork_daemonXX "$@" </dev/null >/dev/null 2>/dev/null &
+    $WKDIR/$PROGNAME XXrefork_daemonXX.XX "$@" </dev/null >/dev/null 2>/dev/null &
     exit 0
 fi
 
-if [ "$1" != "XXrefork_daemonXX" ] ; then
+if [ "$1" != "XXrefork_daemonXX.XX" ] ; then
     tty=$(tty)
     setsid $WKDIR/$PROGNAME child "$@" &
     exit 0

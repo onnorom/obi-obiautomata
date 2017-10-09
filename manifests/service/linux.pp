@@ -23,6 +23,7 @@ class obijiautomata::service::linux (
       ensure_resource ('file', '/etc/automata/bin', { ensure => 'directory', mode   => '0755' })
 
       $worker_name="automata_worker_${facts['app_environment']}.sh"
+      $worker_pid="automata_worker_${facts['app_environment']}.pid"
       $service = { 'start' => "/etc/automata/bin/${worker_name}", 'stop' => '/bin/kill -s SIGUSR1 $MAINPID' }
 
       file { "/etc/automata/bin/${worker_name}":
@@ -30,7 +31,7 @@ class obijiautomata::service::linux (
         mode    => '0755',
         content => epp('obijiautomata/worker.epp', {
             update_script_path => $script,
-            pidfile            => '/var/automata/pid/automata.pid',
+            pidfile            => "/var/automata/pid/${worker_pid}",
             sleep_secs         => $sleep_interval,
         })
       }
