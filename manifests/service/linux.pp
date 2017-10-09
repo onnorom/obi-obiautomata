@@ -42,6 +42,7 @@ class obijiautomata::service::linux (
         content => epp('obijiautomata/service.epp', {
             startstr => $service['start'],
             stopstr  => $service['stop'],
+            pidfile  => "/var/automata/pid/${worker_pid}",
         })
       }
 
