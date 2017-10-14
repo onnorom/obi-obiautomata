@@ -43,7 +43,11 @@ class obijiautomata::service::linux::gatekeeper (
       }
     }
 
-    # Remove cron job(s)
-    obijiautomata::service::linux::uninstall { "puppet-apply-${automaton_prefix}": target => 'cronjob' }
+    $cronservice = generate("/bin/bash","-c","grep puppet-apply-${automaton_prefix} /var/spool/cron/crontabs/root | tr -t '\n' ':'")
+    $cronservice_files = split($cronservice, ":")
+    if ! empty($cronservice_files) {
+      # Remove cron job(s)
+      obijiautomata::service::linux::uninstall { "puppet-apply-${automaton_prefix}": target => 'cronjob' }
+    }
   }
 }
