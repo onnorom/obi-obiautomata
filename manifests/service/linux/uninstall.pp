@@ -10,13 +10,14 @@ define obijiautomata::service::linux::uninstall (
       service { $servicename:
         ensure    => $ensure,
         enable    => $enable,
-      }->file { "${title}-service-name":
-           path   => $title,
-           ensure => 'absent',
+      }->exec { $title:
+           command   => "rm -f ${title}",
+           onlyif    => "test -f ${title}",
+           path      => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin'],
       }
     }
     processfile: {
-      file { "${title}-service-file":
+      file { $title:
         path   => $title,
         ensure => 'absent',
       }
