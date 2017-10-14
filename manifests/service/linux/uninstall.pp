@@ -17,9 +17,10 @@ define obijiautomata::service::linux::uninstall (
       }
     }
     processfile: {
-      notice("OJIAKU -- $title")
-      file { $title:
-        ensure => 'absent',
+      exec { $title:
+        command   => "rm -f ${title}",
+        onlyif    => "test -f ${title}",
+        path      => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin'],
       }
     }
     cronjob: {
