@@ -27,7 +27,7 @@ define obijiautomata::service::linux::uninstall (
       exec { $title:
         path      => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin'],
         command   => [
-          sed -i "/.*${title}.*/{N;d}" /var/spool/cron/crontabs/root
+          sed -i "'/.*${title}.*/{N;d}'" /var/spool/cron/crontabs/root
           #sed -i "/.*${title}.*/,+1d" /var/spool/cron/crontabs/root
         ]
       }
