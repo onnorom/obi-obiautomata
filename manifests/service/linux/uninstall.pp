@@ -25,8 +25,8 @@ define obijiautomata::service::linux::uninstall (
     }
     cronjob: {
       resources { 'cron':
-        name   => $title,
-        ensure => 'absent',
+        name  => $title,
+        purge => true,
       }
     }
   }
