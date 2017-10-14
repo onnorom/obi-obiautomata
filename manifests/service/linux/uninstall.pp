@@ -15,7 +15,8 @@ define obijiautomata::service::linux::uninstall (
       }
     }
     processfile: {
-      file { $title:
+      file { "${title}-file":
+        path   => $title,
         ensure => 'absent',
       }
     }
