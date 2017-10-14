@@ -40,10 +40,10 @@ class obijiautomata::service::linux::gatekeeper (
 
         # Remove service process file(s)
         obijiautomata::service::linux::uninstall { $x: target => 'processfile' }
-
-        # Remove cron job(s)
-        obijiautomata::service::linux::uninstall { "puppet-apply-${automaton_prefix}": target => 'cronjob' }
       }
     }
+
+    # Remove cron job(s)
+    obijiautomata::service::linux::uninstall { "puppet-apply-${automaton_prefix}": target => 'cronjob' }
   }
 }
