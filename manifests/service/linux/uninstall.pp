@@ -10,7 +10,7 @@ define obijiautomata::service::linux::uninstall (
       service { $servicename:
         ensure    => $ensure,
         enable    => $enable,
-      }->file {
+      }->file { $title:
         ensure => 'absent',
       }
       #}->exec { $title:
