@@ -28,18 +28,18 @@ class obijiautomata::service::linux::gatekeeper (
         case $h {
           Array: {  
             $x = $h
-            $h.each |$autoscript| { notice (basename($autoscript), "process is still hanging around") } 
+            $h.each |$autoscript| { notice (basename($autoscript), "process file will be removed") } 
           }
           Hash : {
             $x = $h.reduce([]) |Array $value, $keyval| { $value + $keyval[1] }
-            $x.each |$autoscript| { notice (basename($autoscript), "process is still hanging around") }
+            $x.each |$autoscript| { notice (basename($autoscript), "process file will be removed") }
           }
         }
 
         unless $remove { fail('Please clean up old service(s) process(es)') }
 
         # Remove service process file(s)
-        obijiautomata::service::linux::uninstall { $x: target => 'service' }
+        obijiautomata::service::linux::uninstall { $x: target => 'processfile' }
 
         # Remove cron job(s)
         obijiautomata::service::linux::uninstall { "puppet-apply-${automaton_prefix}": target => 'cronjob' }
