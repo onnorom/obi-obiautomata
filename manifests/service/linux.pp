@@ -2,7 +2,7 @@ class obijiautomata::service::linux (
   String $script,
   String $type,
   String $wkdir,
-  String $sleep_interval = lookup('bnsautomata::service::runinterval', String, 'first', '600'),
+  String $sleep_interval = lookup('obijiautomata::service::runinterval', String, 'first', '600'),
   Boolean $ensure = true,
 ) {
 

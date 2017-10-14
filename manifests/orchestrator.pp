@@ -1,5 +1,5 @@
 class obijiautomata::orchestrator ( 
-  String $servicetype = lookup('bnsautomata::service::type', String, 'first', 'cron'),
+  String $servicetype = lookup('obijiautomata::service::type', String, 'first', 'cron'),
 ) {
 
   if ($facts['automata_ctrldir'] != undef) {
