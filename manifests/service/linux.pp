@@ -9,7 +9,7 @@ class obijiautomata::service::linux (
   $automata_title = split($title, '::')
   $automaton = $automata_title[0]
 
-  class {"${automaton}::service::linux::gatekeeper": 'ctrldir' => $wkdir} 
+  class {"${automaton}::service::linux::gatekeeper": ctrldir => $wkdir} 
   if ($type == 'cron') {
     $myinterval = 0 + $sleep_interval
     $mins = $myinterval / 60
