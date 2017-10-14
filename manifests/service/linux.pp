@@ -55,7 +55,7 @@ class obijiautomata::service::linux (
       # Reload the changed file
       exec { '/bin/systemctl daemon-reload':
         refreshonly => true,
-        notify      => Service[$automaton],
+        notify      => Service["${automaton}-${facts['app_environment']}"],
         require     => File["/etc/systemd/system/${automaton}-${facts['app_environment']}.service"],
       }
 
