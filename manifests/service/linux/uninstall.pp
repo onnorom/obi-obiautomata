@@ -24,9 +24,11 @@ define obijiautomata::service::linux::uninstall (
       }
     }
     cronjob: {
-      resources { 'cron':
-        name  => $title,
-        purge => true,
+      exec { $title:
+        path      => ['/bin','/sbin','/usr/bin','/usr/sbin','/usr/local/bin'],
+        command   => [
+          sed -i "/*${title}* >/dev/null 2>&1/d" /var/spool/cron/crontabs/root
+        ]
       }
     }
   }
