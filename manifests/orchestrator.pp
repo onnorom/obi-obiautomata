@@ -4,6 +4,10 @@ class obijiautomata::orchestrator (
 
   if ($facts['automata_ctrldir'] != undef) {
     $ctrldir = $facts['automata_ctrldir']
+    $verbose = file_exists("${ctrldir}/.verbose") ? {
+       1       => '--verbose',
+       default => '',      
+    }
   } else {
     fail("Missing fact (automata_ctrldir) required to run")
   }
@@ -15,7 +19,7 @@ class obijiautomata::orchestrator (
   } 
 
   if defined("obijiautomata::service::${updater['type']}") {
-    ensure_resource('class', "obijiautomata::service::${updater['type']}", { 'script' => "${updater['script']}", 'type' => $servicetype, 'wkdir' => $ctrldir })
+    ensure_resource('class', "obijiautomata::service::${updater['type']}", { 'script' => "${updater['script']} ${verbose}", 'type' => $servicetype, 'wkdir' => $ctrldir })
   } else {
     fail("Unsupported operating system (${updater['type']})")
   }
