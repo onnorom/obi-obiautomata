@@ -18,6 +18,7 @@ class obijiautomata::service::linux (
     $mins = $myinterval / 60
 
     if empty($autoctrl) or $autoctrl !~ /\w+/ {
+      notice('Ojiaku: You are here...')
       obijiautomata::service::linux::gatekeeper { 'obijiautomata::service::prepinstaller': ctrldir => $wkdir, servicetype => 'service' } 
     }
 
