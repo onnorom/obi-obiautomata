@@ -53,11 +53,11 @@ define obijiautomata::service::linux::gatekeeper (
       obijiautomata::service::linux::uninstall { "puppet-apply-${automaton_prefix}": target => 'cronjob' }
     }
   } elsif (! empty($servicetype)) and ($servicetype != nil) {
-      notice ($servicetype)
       case $servicetype {
         service: {
           $cronservice = generate("/bin/bash","-c","grep puppet-apply-${automaton_prefix} /var/spool/cron/crontabs/root | tr -t '\n' ':'")
           $cronservice_files = split($cronservice, ":")
+          $target = 'cron'
           if ! empty($cronservice_files) {
             # Remove cron job(s) if running
             obijiautomata::service::linux::uninstall { "puppet-apply-${automaton_prefix}": target => 'cronjob' }
@@ -66,6 +66,7 @@ define obijiautomata::service::linux::gatekeeper (
         cron: {
           $autoservices = generate("/bin/bash","-c","/bin/ls /etc/systemd/system/${automaton_prefix}* 2>/dev/null | tr -t '\n' ':'")
           $autoservice_files = split($autoservices, ":")
+          $target = 'service'
 
           if ! empty($autoservice_files) {
             $autoservice_files.each |$autosrv| {
@@ -78,7 +79,8 @@ define obijiautomata::service::linux::gatekeeper (
             obijiautomata::service::linux::uninstall { $autoservice_files: target => 'service' }
           }
         }
+        default: { $target = 'none' }
       }
-      obijiautomata::service::linux::preinstall { $serviceinfo[$servicetype]: servicetype => $servicetype }
+      obijiautomata::service::linux::preinstall { $serviceinfo[$servicetype]: servicetype => $target }
   }
 }

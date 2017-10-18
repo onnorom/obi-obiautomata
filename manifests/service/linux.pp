@@ -18,8 +18,7 @@ class obijiautomata::service::linux (
     $mins = $myinterval / 60
 
     if empty($autoctrl) or $autoctrl !~ /\w+/ {
-      notice('Ojiaku: You are here...')
-      obijiautomata::service::linux::gatekeeper { 'obijiautomata::service::prepinstaller': ctrldir => $wkdir, servicetype => 'service' } 
+      obijiautomata::service::linux::gatekeeper { 'obijiautomata::service::prepinstaller': ctrldir => $wkdir, servicetype => 'cron' } 
     }
 
     cron { "puppet-apply-${automaton}":
@@ -45,7 +44,7 @@ class obijiautomata::service::linux (
       $service = { 'start' => "/etc/automata/bin/${worker_name}", 'stop' => '/bin/kill -s SIGUSR1 $MAINPID' }
 
       if empty($autoctrl) or $autoctrl !~ /\w+/ {
-        obijiautomata::service::linux::gatekeeper { 'obijiautomata::service::prepinstaller': ctrldir => $wkdir, servicetype => 'cron' } 
+        obijiautomata::service::linux::gatekeeper { 'obijiautomata::service::prepinstaller': ctrldir => $wkdir, servicetype => 'service' } 
       }
 
       file { "/etc/automata/bin/${worker_name}":
