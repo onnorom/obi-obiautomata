@@ -60,7 +60,8 @@ define obijiautomata::service::linux::gatekeeper (
           $target = 'cron'
           if ! empty($cronservice_files) {
             # Remove cron job(s) if running
-            obijiautomata::service::linux::uninstall { "puppet-apply-${automaton_prefix}": target => 'cronjob' }
+            #obijiautomata::service::linux::uninstall { "puppet-apply-${automaton_prefix}": target => 'cronjob' }
+            obijiautomata::service::linux::preinstall { $serviceinfo[$target]: servicetype => $target }
           }
         }
         cron: {
@@ -76,11 +77,11 @@ define obijiautomata::service::linux::gatekeeper (
             unless $remove { fail('Please consider removing existing service(s)') }
 
             # Stop and remove service if running
-            obijiautomata::service::linux::uninstall { $autoservice_files: target => 'service' }
+            #obijiautomata::service::linux::uninstall { $autoservice_files: target => 'service' }
+            obijiautomata::service::linux::preinstall { $serviceinfo[$target]: servicetype => $target }
           }
         }
         default: { $target = 'none' }
       }
-      obijiautomata::service::linux::preinstall { $serviceinfo[$target]: servicetype => $target }
   }
 }
