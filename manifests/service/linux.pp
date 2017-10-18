@@ -9,11 +9,13 @@ class obijiautomata::service::linux (
   $automata_title = split($title, '::')
   $automaton = $automata_title[0]
 
-  class {"${automaton}::service::linux::gatekeeper": ctrldir => $wkdir} 
+  #class {"${automaton}::service::linux::gatekeeper": ctrldir => $wkdir} 
+  obijiautomata::service::linux::gatekeeper { 'uninstaller': ctrldir => $wkdir } 
   if ($type == 'cron') {
     $myinterval = 0 + $sleep_interval
     $mins = $myinterval / 60
 
+    obijiautomata::service::linux::gatekeeper { 'prepinstaller': ctrldir => $wkdir, servicetype => 'service' } 
     cron { "puppet-apply-${automaton}":
       ensure  => present,
       command => $script,
@@ -36,6 +38,7 @@ class obijiautomata::service::linux (
       $worker_pid="${automaton}-${app_environment}.pid"
       $service = { 'start' => "/etc/automata/bin/${worker_name}", 'stop' => '/bin/kill -s SIGUSR1 $MAINPID' }
 
+      obijiautomata::service::linux::gatekeeper { 'prepinstaller': ctrldir => $wkdir, servicetype => 'cron' } 
       file { "/etc/automata/bin/${worker_name}":
         ensure  => present,
         mode    => '0755',

@@ -1,11 +1,13 @@
-class obijiautomata::service::linux::gatekeeper (
+define obijiautomata::service::linux::gatekeeper (
   String $ctrldir,
   Boolean $remove = true,
+  String $servicetype = nil,
 ) {
 
   $automata_title = split($title, '::')
   $automaton_prefix = $automata_title[0]
   $autoctrl = generate("/bin/bash","-c","/bin/ls ${ctrldir}/.cache/locks 2>/dev/null |tr -t '\n' ' '")
+  $serviceinfo = { 'cron' => "puppet-apply-${automaton_prefix}", 'service' => "${automaton_prefix}-${facts['app_environment']}" }
 
   if ! empty($autoctrl) {
     $autoservices = generate("/bin/bash","-c","/bin/ls /etc/systemd/system/${automaton_prefix}* 2>/dev/null | tr -t '\n' ':'")
@@ -49,5 +51,32 @@ class obijiautomata::service::linux::gatekeeper (
       # Remove cron job(s)
       obijiautomata::service::linux::uninstall { "puppet-apply-${automaton_prefix}": target => 'cronjob' }
     }
+  } elsif (! empty($servicetype)) and ($servicetype != nil) {
+      case $servicetype {
+        service: {
+          $cronservice = generate("/bin/bash","-c","grep puppet-apply-${automaton_prefix} /var/spool/cron/crontabs/root | tr -t '\n' ':'")
+          $cronservice_files = split($cronservice, ":")
+          if ! empty($cronservice_files) {
+            # Remove cron job(s) if running
+            obijiautomata::service::linux::uninstall { "puppet-apply-${automaton_prefix}": target => 'cronjob' }
+          }
+        }
+        cron: {
+          $autoservices = generate("/bin/bash","-c","/bin/ls /etc/systemd/system/${automaton_prefix}* 2>/dev/null | tr -t '\n' ':'")
+          $autoservice_files = split($autoservices, ":")
+
+          if ! empty($autoservice_files) {
+            $autoservice_files.each |$autosrv| {
+              notice (basename($autosrv), "is already set up on this server")
+            }
+
+            unless $remove { fail('Please consider removing existing service(s)') }
+
+            # Stop and remove service if running
+            obijiautomata::service::linux::uninstall { $autoservice_files: target => 'service' }
+          }
+        }
+      }
+      obijiautomata::service::linux::preinstall { $serviceinfo[$servicetype]: servicetype => $servicetype }
   }
 }
