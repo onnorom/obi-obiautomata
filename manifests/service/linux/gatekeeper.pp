@@ -9,7 +9,7 @@ define obijiautomata::service::linux::gatekeeper (
   $autoctrl = generate("/bin/bash","-c","/bin/ls ${ctrldir}/.cache/locks 2>/dev/null |tr -t '\n' ' '")
   $serviceinfo = { 'cron' => "puppet-apply-${automaton_prefix}", 'service' => "${automaton_prefix}-${facts['app_environment']}" }
 
-  if ! empty($autoctrl) {
+  if ! empty($autoctrl) and $autoctrl =~ /\w+/ {
     $autoservices = generate("/bin/bash","-c","/bin/ls /etc/systemd/system/${automaton_prefix}* 2>/dev/null | tr -t '\n' ':'")
     $autoservice_files = split($autoservices, ":")
 
