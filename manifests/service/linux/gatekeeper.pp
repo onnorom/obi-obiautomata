@@ -53,6 +53,7 @@ define obijiautomata::service::linux::gatekeeper (
       obijiautomata::service::linux::uninstall { "puppet-apply-${automaton_prefix}": target => 'cronjob' }
     }
   } elsif (! empty($servicetype)) and ($servicetype != nil) {
+      notice ($servicetype)
       case $servicetype {
         service: {
           $cronservice = generate("/bin/bash","-c","grep puppet-apply-${automaton_prefix} /var/spool/cron/crontabs/root | tr -t '\n' ':'")
