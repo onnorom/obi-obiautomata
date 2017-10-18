@@ -11,7 +11,7 @@ class obijiautomata::service::linux (
 
   #class {"${automaton}::service::linux::gatekeeper": ctrldir => $wkdir} 
   $autoctrl = generate("/bin/bash","-c","/bin/ls ${wkdir}/.cache/locks 2>/dev/null |tr -t '\n' ' '")
-  obijiautomata::service::linux::gatekeeper { 'uninstaller': title => 'obijiautomata::service::linux::gatekeeper', ctrldir => $wkdir } 
+  obijiautomata::service::linux::gatekeeper { 'obijiautomata::service::linux::gatekeeper': ctrldir => $wkdir } 
 
   if ($type == 'cron') {
     $myinterval = 0 + $sleep_interval
