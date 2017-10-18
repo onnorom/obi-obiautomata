@@ -1,4 +1,4 @@
-define obijiautomata::service::linux:preinstall (
+define obijiautomata::service::linux::preinstall (
   String $servicetype,
 ) {
 
