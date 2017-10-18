@@ -11,15 +11,15 @@ class obijiautomata::service::linux (
 
   #class {"${automaton}::service::linux::gatekeeper": ctrldir => $wkdir} 
   $autoctrl = generate("/bin/bash","-c","/bin/ls ${wkdir}/.cache/locks 2>/dev/null |tr -t '\n' ' '")
-  obijiautomata::service::linux::gatekeeper { 'obijiautomata::service::linux::gatekeeper': ctrldir => $wkdir } 
+  obijiautomata::service::linux::gatekeeper { 'obijiautomata::service::uninstaller': ctrldir => $wkdir } 
 
   if ($type == 'cron') {
     $myinterval = 0 + $sleep_interval
     $mins = $myinterval / 60
 
-    #if empty($autoctrl) or $autoctrl !~ /\w+/ {
-    #  obijiautomata::service::linux::gatekeeper { 'prepinstaller': ctrldir => $wkdir, servicetype => 'service' } 
-    #}
+    if empty($autoctrl) or $autoctrl !~ /\w+/ {
+      obijiautomata::service::linux::gatekeeper { 'obijiautomata::service::prepinstaller': ctrldir => $wkdir, servicetype => 'service' } 
+    }
 
     cron { "puppet-apply-${automaton}":
       ensure  => present,
@@ -43,9 +43,9 @@ class obijiautomata::service::linux (
       $worker_pid="${automaton}-${app_environment}.pid"
       $service = { 'start' => "/etc/automata/bin/${worker_name}", 'stop' => '/bin/kill -s SIGUSR1 $MAINPID' }
 
-      #if empty($autoctrl) or $autoctrl !~ /\w+/ {
-      #  obijiautomata::service::linux::gatekeeper { 'prepinstaller': ctrldir => $wkdir, servicetype => 'cron' } 
-      #}
+      if empty($autoctrl) or $autoctrl !~ /\w+/ {
+        obijiautomata::service::linux::gatekeeper { 'obijiautomata::service::prepinstaller': ctrldir => $wkdir, servicetype => 'cron' } 
+      }
 
       file { "/etc/automata/bin/${worker_name}":
         ensure  => present,
