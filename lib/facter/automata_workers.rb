@@ -1,4 +1,4 @@
-if Facter.kernel == 'Linux'
+if Facter.value(:kernel) == 'Linux'
   array = Dir.glob('/etc/automata/bin/*.sh')
   hash = {}
   array.each do |item|
