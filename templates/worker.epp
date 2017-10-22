@@ -9,7 +9,10 @@ pidfile=<%=$pidfile%>
 process_USR1() {
     err=$?
     echo "Got signal $err"
-    exit $err 
+    if [[ -n $(cat $pidfile 2>/dev/null) ]]; then
+      wait $(cat $pidfile)
+    fi
+    exit 0 
 }
 
 trap process_USR1 SIGUSR1 SIGUSR2 SIGTERM
