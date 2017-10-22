@@ -9,8 +9,9 @@ pidfile=<%=$pidfile%>
 process_USR1() {
     err=$?
     echo "Got signal $err"
-    if [[ -n $(cat $pidfile 2>/dev/null) ]]; then
-      wait $(cat $pidfile)
+    pid=$(cat $pidfile 2>/dev/null)
+    if [[ -n $pid ]]; then
+      while ps -p $pid > /dev/null; do sleep 1; done;
     fi
     exit 0 
 }
