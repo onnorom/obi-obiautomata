@@ -3,6 +3,9 @@ define obijiautomata::service::linux::preinstall (
 ) {
 
   case $servicetype {
+    file { '/var/automata/pid/automata.pid':
+      ensure => absent,
+    }->
     service: {
       service { $title:
         ensure    => stopped,
