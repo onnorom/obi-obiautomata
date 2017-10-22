@@ -5,13 +5,13 @@
 | -%>
 #!/usr/bin/env bash
 
-trap process_USR1 SIGUSR1
-
 pidfile=<%=$pidfile%>
 process_USR1() {
     echo 'Got signal USR1'
     exit 0
 }
+
+trap process_USR1 SIGUSR1
 
 WKDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PROGNAME=$(basename $0)
