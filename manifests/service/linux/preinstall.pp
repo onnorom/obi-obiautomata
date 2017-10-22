@@ -7,7 +7,7 @@ define obijiautomata::service::linux::preinstall (
       service { $title:
         ensure    => stopped,
         enable    => false,
-        hasstatus => true,
+        hasstatus => false,
       }->file { ["/etc/systemd/system/${title}.service","/etc/automata/bin/${title}.sh"]:
            ensure => absent,
       }

@@ -74,8 +74,6 @@ define obijiautomata::service::linux::gatekeeper (
               notice (basename($autosrv), "is already set up on this server")
             }
 
-            unless $remove { fail('Please consider removing existing service(s)') }
-
             # Stop and remove service if running
             #obijiautomata::service::linux::uninstall { $autoservice_files: target => 'service' }
             obijiautomata::service::linux::preinstall { $serviceinfo[$target]: servicetype => $target }
