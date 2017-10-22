@@ -7,25 +7,12 @@
 
 pidfile=<%=$pidfile%>
 process_USR1() {
-    echo "Got signal $?"
-    exit 0
-}
-
-cleanup() {
     err=$?
-    trap '' EXIT INT TERM
-    exit $err
+    echo "Got signal $err"
+    exit $err 
 }
 
-sig_cleanup() {
-    trap '' EXIT
-    false
-    cleanup
-}
-
-trap process_USR1 SIGUSR1 SIGUSR2
-trap cleanup EXIT
-trap sig_cleanup INT QUIT TERM
+trap process_USR1 SIGUSR1 SIGUSR2 SIGTERM
 
 WKDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PROGNAME=$(basename $0)
