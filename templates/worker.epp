@@ -12,7 +12,7 @@ process_USR1() {
     echo "Got signal $err (pid -- $pid)"
     if [[ -n $pid ]]; then
       #while ps -p $pid > /dev/null; do
-        kill -TERM $pid
+        kill -SIGUSR1 $pid
       #  sleep 1;
       #done;
     fi
