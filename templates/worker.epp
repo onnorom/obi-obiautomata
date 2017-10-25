@@ -10,12 +10,11 @@ process_USR1() {
     err=$?
     pid=$(cat $pidfile 2>/dev/null)
     if [[ -n $pid ]]; then
-      while ps -p $pid >/dev/null; do
+      while ps -p $pid >/dev/null 2>&1; do
         echo "Got signal $err (pid -- $pid)" >&2
-        sleep 2
       done
     fi
-    exit $err 
+    exit 0 
 }
 
 trap process_USR1 SIGUSR1 SIGUSR2 SIGTERM
