@@ -9,10 +9,10 @@ pidfile=<%=$pidfile%>
 process_USR1() {
     err=$?
     pid=$(cat $pidfile 2>/dev/null)
-    echo "Got signal $err (pid -- $pid)"
-    if [[ -n $pid ]]; then
-      kill -TERM $pid
-    fi
+    echo "Got signal $err (pid -- $pid)" >&2
+    #if [[ -n $pid ]]; then
+    #  kill -TERM $pid
+    #fi
     exit 0 
 }
 
