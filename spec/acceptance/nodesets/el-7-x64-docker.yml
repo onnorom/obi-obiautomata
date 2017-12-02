@@ -1,0 +1,19 @@
+---
+# This file is managed via modulesync
+# https://github.com/voxpupuli/modulesync
+# https://github.com/voxpupuli/modulesync_config
+HOSTS:
+  el-7-x64-web:
+    roles:
+      - agent
+    platform: el-7-x64
+    image: "#{ENV['IMG_HOST']}"
+    docker_cmd: '["/sbin/init"]'
+    hypervisor: docker
+CONFIG:
+    masterless: true
+    type: aio
+    logger: debug
+    trace_limit: 550
+
+# vim: syntax=yaml

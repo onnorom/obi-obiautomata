@@ -1,0 +1,84 @@
+require 'spec_helper'
+
+on_supported_os = { 
+  'RedHat' => {
+    'automata_ctrldir' => '/var/tmp/obijictrl', 
+    'osfamily' => 'RedHat',
+    'os' => {'family' => 'RedHat'},
+    'operatingsystem' => 'CentOS',
+    'app_environment' => 'production',
+  }, 
+  'Debian' => {
+    'automata_ctrldir' => '/var/tmp/obijictrl', 
+    'osfamily' => 'Debian',
+    'os' => {'family' => 'Debian'},
+    'operatingsystem' => 'Ubuntu',
+    'app_environment' => 'production',
+  },
+  'Windows' => {
+    'automata_ctrldir' => '/var/tmp/obijictrl', 
+    'osfamily' => 'Windows',
+    'os' => {'family' => 'Windows'},
+    'operatingsystem' => 'WinXP',
+    'app_environment' => 'production',
+  }
+}
+
+service_classes = {
+  'RedHat' => 'linux',
+  'Debian' => 'linux',
+  'Windows' => 'windows',
+}
+
+describe 'obijiautomata' do
+  ['Debian','RedHat','Windows'].each do |x| 
+    let(:facts) do 
+      on_supported_os[x] 
+    end
+  end
+  it { should contain_class('obijiautomata') }
+  it { should contain_class('obijiautomata::orchestrator') }
+end
+
+describe 'obijiautomata::orchestrator' do
+  on_supported_os.each do |os, facts|
+    if os == 'Windows'
+      context "on #{os}" do
+        let(:facts) do 
+          facts 
+        end
+        it { is_expected.to contain_class("obijiautomata::service::#{service_classes[os]}") }
+        it { is_expected.to compile.with_all_deps }
+      end
+
+    else
+      context "on #{os}" do
+        let(:title) { 'obijiautomata' } # sets title of the class declaration
+
+        let(:facts) do 
+          facts 
+        end
+
+        let(:params) { {
+	  :servicetype => 'service'
+        } }
+
+        it { is_expected.to contain_class("obijiautomata::service::#{service_classes[os]}") }
+        it { is_expected.to contain_service("#{title}-#{facts['app_environment']}").with(:ensure => true, :enable => true) }
+        it { is_expected.to contain_file("/etc/automata/bin/#{title}-#{facts['app_environment']}.sh") }
+        it { is_expected.to contain_file("/etc/systemd/system/#{title}-#{facts['app_environment']}.service") }
+
+        context 'with servicetype cron' do
+          let(:params) { { 
+	    :servicetype => 'cron'
+	  } } 
+
+    	  it { is_expected.to contain_cron("puppet-apply-#{title}").with(:ensure => 'present') }
+        end
+
+        it { should contain_class('obijiautomata::orchestrator') }
+        it { is_expected.to compile.with_all_deps }
+      end
+    end
+  end
+end

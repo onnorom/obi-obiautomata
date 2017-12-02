@@ -1,7 +1,7 @@
 {
-  "name": "obijiautomata",
+  "name": "obi-obijiautomata",
   "version": "0.1.7",
-  "author": "obiji.nnorom@gmail.com",
+  "author": "obijinnorom@gmail.com",
   "summary": "Installs software to ensure proper building of masterless projects.",
   "license": "Apache-2.0",
   "source": "https://github.com/onnorom/obi-obijiautomata",
@@ -12,5 +12,18 @@
     {"name":"puppet-archive","version_requirement":"1.1.2"},
     {"name":"puppetlabs-concat","version_requirement":"3.0.0"},
     {"name":"puppetlabs-apt","version_requirement":"2.1.0"}
-  ]
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+	"7"
+      ]
+    },
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+	"7"
+      ]
+    }
 }

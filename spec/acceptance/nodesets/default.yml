@@ -1,0 +1,11 @@
+HOSTS:
+  ubuntu-12-04:
+    platform: ubuntu-12.04-x64
+    image: solarkennedy/ubuntu-12.04-puppet
+    docker_cmd: '["/sbin/init"]'
+    hypervisor: docker
+CONFIG:
+  masterless: true
+  type: aio
+  logger: debug
+  trace_limit: 550 

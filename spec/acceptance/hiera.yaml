@@ -1,0 +1,11 @@
+---
+version: 5
+defaults:
+    datadir: data
+    data_hash: yaml_data
+hierarchy:
+    - name: "Defined environment yaml"
+      path: "%{environment}.yaml"
+    - name: "Default yaml file"
+      path: "common.yaml"
+
